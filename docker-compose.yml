@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+  nginx:
+    image: "nginx:stable"
+    volumes:
+      - ".:/var/www/html:rw"
+      - "./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    healthcheck:
+      test: [ "CMD-SHELL", "service nginx status || exit 1" ]
+      timeout: 2s
+      retries: 10
+      interval: 5s
+    restart: "unless-stopped"
+    networks:
+      default:
+        aliases:
+          - "beam.press"
+
+  beam:
+    domainname: "beam.press"
+    hostname: "beam"
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      APP_NAME: "Beam"
+      PHP_IDE_CONFIG: "serverName=beam.press"
+    build:
+      context: "./docker/php"
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+        UNAME: ${UNAME:-docker}
+    volumes:
+      - ".:/var/www/html:rw"
+    depends_on:
+      nginx:
+        condition: service_healthy
+#      mysql:
+#        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: "unless-stopped"
+
+  mysql:
+    image: "mysql:8.0"
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+      - "./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--skip-character-set-client-handshake"
+      - "--explicit_defaults_for_timestamp"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_ROOT_PASSWORD: "secret"
+    healthcheck:
+      test: [ "CMD", "mysqladmin" , "ping", "-h", "localhost"]
+      timeout: 2s
+      retries: 10
+      interval: 500s
+    restart: "unless-stopped"
+
+  redis:
+    image: "redis:6.2"
+    volumes:
+      - "redis-data:/data"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      timeout: 2s
+      retries: 10
+      interval: 5s
+    restart: "unless-stopped"
+
+volumes:
+  mysql-data:
+    driver: "local"
+  redis-data:
+    driver: "local"
+
+networks:
+  default:

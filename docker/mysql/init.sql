@@ -1,0 +1,1 @@
+CREATE DATABASE IF NOT EXISTS beam COLLATE 'utf8mb4_unicode_ci';

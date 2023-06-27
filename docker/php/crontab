@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Docker only captures output of the process with PID 1, therefore redirect output to that process
+* * * * * root php /var/www/html/bin/command.php mail:process-job >> /proc/1/fd/1 2>/proc/1/fd/2
