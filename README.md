@@ -87,13 +87,6 @@ Recommended _(tested)_ versions are:
       make install
       ```
 
-   Initialize database and application:
-
-      ```bash
-      php artisan migrare
-      php artisan key:generate
-      ```
-
 5. Integration with other REMP services:
 
    #### Sso
@@ -154,13 +147,6 @@ Now run the installation:
 
 ```bash
 make install
-```
-
-Initialize database and application:
-
-```bash
-php artisan migrare
-php artisan key:generate
 ```
 
 ## Customization
