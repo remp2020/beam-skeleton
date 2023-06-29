@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "remp/beam-module": "@dev"
+        "remp/beam-module": "3.0.0"
     },
     "autoload": {
         "psr-4": {
