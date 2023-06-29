@@ -31,12 +31,7 @@ RUN apt-get update && apt-get install -y ${BUILD_DEPS} ${RUN_DEPS} \
 
 # PHP
 
-ADD xdebug.ini /tmp/xdebug.ini
-
-RUN cat /tmp/xdebug.ini >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
 ADD log.conf /usr/local/etc/php-fpm.d/zz-log.conf
-
 
 # OPCache
 
