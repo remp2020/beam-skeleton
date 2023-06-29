@@ -115,12 +115,6 @@ Recommended _(tested)_ versions are:
     docker compose exec beam bash
     ```
 
-   When inside the container, add required permissions:
-
-    ```bash
-    chmod -R a+rw storage
-    ```
-
    After that, choose and run one of the two installation options:
 
    ```bash
