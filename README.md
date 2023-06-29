@@ -5,6 +5,46 @@ This is a pre-configured skeleton of REMP Beam application with simple installat
 Beam Admin serves as a tool for configuration of sites, properties and segments. It's the place to see
 the stats based on the tracked events and configuration of user segments.
 
+## Prerequisities
+
+To fully functional Beam you have to integrate skeleton application with other REMP tools: 
+
+## Sso
+
+As a default authentication method for secured routes Beam is using middleware `Remp\LaravelSso\Http\Middleware\VerifyJwtToken`, which authenticates user against preconfigured [SSO service](https://github.com/remp2020/remp/tree/master/Sso) running on `http://sso.remp.press` url.
+To change Sso url edit `.env` variable `REMP_SSO_ADDR`.
+
+To proper network configuration you should edit `docker-compose.override.yml` according your setup:
+
+```yaml
+services:
+# ... 
+  beam:
+    extra_hosts:
+      - "sso.remp.press:192.168.65.2"
+```
+
+[Sso documentation](https://github.com/remp2020/remp/tree/master/Sso).
+
+## Segments
+
+Segments (also known as Journal) is read-only API to acquire aggregations over the tracked data.
+
+To run segments please see [segments documentation.](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/segments)
+
+Now edit configured address of segments service in `.env` configuration `REMP_SEGMENTS_ADDR`.
+
+## Tracker
+
+Tracker is a gateway for storing both user and system events. Tracker validates the request and posts Influx-formatted set of data to a message broker implementation (either Kafka or Pub/Sub).
+
+To run tracker locally please follow [tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker).
+
+Now edit configured address of tracker in `.env` configuration `REMP_TRACKER_ADDR`.
+
+[Tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker).
+
+
 ## Installation
 
 ### Docker
@@ -43,7 +83,7 @@ Recommended _(tested)_ versions are:
     ERROR: for nginx  Cannot start service nginx: Ports are not available: listen tcp 0.0.0.0:80: bind: address already in use
     ```
 
-   In such case, change port mapping in `docker-composer.override.yml`. For example, the following setting maps internal port 80 to external port 8080, so the application will be available at http://beam.press:8080.
+   In such case, change port mapping in `docker-composer.override.yml`. For example, the following setting maps internal port 80 to external port 8080, so the application will be available at http://beam.remp.press:8080.
     ```yaml
     services:
     # ...
@@ -54,11 +94,11 @@ Recommended _(tested)_ versions are:
 
 3. Setup host
 
-   Default host used by application is `http://beam.press`.
+   Default host used by application is `http://beam.remp.press`.
    This domain should by pointing to localhost (`127.0.0.1`), so add it to local `/etc/hosts` file.
 
     ```bash
-    echo '127.0.0.1 beam.press' | sudo tee -a /etc/hosts
+    echo '127.0.0.1 beam.remp.press' | sudo tee -a /etc/hosts
     ```
 
 4. Start Docker containers
@@ -83,47 +123,16 @@ Recommended _(tested)_ versions are:
 
    After that, choose and run one of the two installation options:
 
-      ```bash
-      make install
-      ```
-
-5. Integration with other REMP services:
-
-   #### Sso
-   
-   As a default authentication method for secured routes Beam is using middleware `Remp\LaravelSso\Http\Middleware\VerifyJwtToken`, which authenticates user against preconfigured [SSO service](https://github.com/remp2020/remp/tree/master/Sso) running on `http://sso.remp.press` url.
-   To change Sso url edit `.env` variable `REMP_SSO_ADDR`.
-
-   To proper network configuration you should edit `docker-compose.override.yml` according your setup:
-
-   ```yaml
-   services:
-   # ... 
-     beam:
-       extra_hosts:
-         - "sso.remp.press:192.168.65.2"
+   ```bash
+   make install
    ```
-
-   [Sso documentation](https://github.com/remp2020/remp/tree/master/Sso).
-
-   #### Segments
-
-   Segments (also known as Journal) is read-only API to acquire aggregations over the tracked data.
    
-   To run segments please see [segments documentation.](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/segments)
+5. Set the application key
 
-   Now edit configured address of segments service in `.env` configuration `REMP_SEGMENTS_ADDR`.
-
-   #### Tracker
-
-   Tracker is a gateway for storing both user and system events. Tracker validates the request and posts Influx-formatted set of data to a message broker implementation (either Kafka or Pub/Sub).
+   ```bash
+   php artisan key:generate
+   ```
    
-   To run tracker locally please follow [tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker).
-   
-   Now edit configured address of tracker in `.env` configuration `REMP_TRACKER_ADDR`.
-
-   [Tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker).
-
 ### Manual installation
 
 #### Dependencies
@@ -147,6 +156,11 @@ Now run the installation:
 
 ```bash
 make install
+```
+
+Set the application key
+```bash
+php artisan key:generate
 ```
 
 ## Customization

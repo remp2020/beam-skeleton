@@ -12,6 +12,6 @@ services:
 #  beam:
 #    environment:
 #      XDEBUG_CONFIG: "client_host=10.254.254.254"
-#      PHP_IDE_CONFIG: "serverName=beam.press"
+#      PHP_IDE_CONFIG: "serverName=beam.remp.press"
 #    extra_hosts:
 #      - "sso.remp.press:192.168.65.2"

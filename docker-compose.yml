@@ -15,15 +15,15 @@ services:
     networks:
       default:
         aliases:
-          - "beam.press"
+          - "beam.remp.press"
 
   beam:
-    domainname: "beam.press"
+    domainname: "beam.remp.press"
     hostname: "beam"
     user: "${UID:-1000}:${GID:-1000}"
     environment:
       APP_NAME: "Beam"
-      PHP_IDE_CONFIG: "serverName=beam.press"
+      PHP_IDE_CONFIG: "serverName=beam.remp.press"
     build:
       context: "./docker/php"
       args:
