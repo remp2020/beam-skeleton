@@ -5,7 +5,7 @@ PHP_FOLDERS=app bin tests
 install:
 	composer install
 	make js
-	php artisan migrare
+	php artisan migrate
     php artisan key:generate
 
 js:
