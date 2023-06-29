@@ -55,7 +55,7 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_ROOT_PASSWORD: "secret"
     healthcheck:
-      test: [ "CMD", "mysqladmin" , "ping", "-h", "localhost"]
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-psecret' ]
       timeout: 2s
       retries: 10
       interval: 5s
