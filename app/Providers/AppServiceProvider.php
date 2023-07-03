@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Observers\AccountObserver;
 use Illuminate\Support\ServiceProvider;
+use Remp\BeamModule\Model\Account;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Account::observe(AccountObserver::class);
     }
 }

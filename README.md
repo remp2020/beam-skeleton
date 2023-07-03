@@ -175,11 +175,15 @@ For further information about configuration see official [Laravel documentation]
 
 Along the commands provided by Beam package you could add own commands by manual adding into folder `app/Console/Commands/` or by Artisan command `make:command`. If you would like to change the behaviour of Beam command you could register own version of command with the same signature. 
 
+For example see `App\Console\Commands\TestCommand` which can be call by `php artisan test`.
+
 For further information about commands see official [Laravel documentation](https://laravel.com/docs/8.x/artisan).
 
 ### Routes
 
 Routes registered by Beam package could be replaced by own routes in files `routes/web.php` for web interface or in `routes/api.php` for API calls. 
+
+Two routes are provided as example. Web route `/test` and API route `/api/test/create`.
 
 For further information about routing see official [Laravel documentation](https://laravel.com/docs/8.x/routing).
 
@@ -187,7 +191,17 @@ For further information about routing see official [Laravel documentation](https
 
 To edit views from Beam package add the own version of view into folder structure `resources/views/vendor/beam/`. Laravel will first check if a custom version of the view has been placed in the folder otherwise will use view from Beam package.
 
+As an example you can see `/resources/views/test/index.blade.php` as the view file for `TestController::index` action.
+
 For further information about views overriding see official [Laravel documentation](https://laravel.com/docs/8.x/packages#overriding-package-views).
+
+### Observers
+
+To listen for model changes (Eloquent events) you can use the observers. New observer can be added by using command `php artisan make:observer ModelNameObserver --model=ModelName` or manually added into folder `app/Observers` and registered in `AppServiceProvider`.
+
+As an example is registered observer `App\Observers\AccountObserver` for model `Remp\BeamModule\Model\Account`. 
+
+For further information about observers overriding see official [Laravel documentation](https://laravel.com/docs/8.x/eloquent#observers).
 
 ### Database
 
