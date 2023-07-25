@@ -6,7 +6,6 @@ install:
 	composer install
 	make js
 	php artisan migrate
-    php artisan key:generate
 
 js:
 	yarn install

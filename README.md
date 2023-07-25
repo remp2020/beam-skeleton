@@ -126,6 +126,15 @@ Recommended _(tested)_ versions are:
    ```bash
    php artisan key:generate
    ```
+
+#### Updating
+
+When the new version is released, just update Composer (PHP) dependencies and repeat the installation process:
+
+```bash
+composer update
+make install
+```
    
 ### Manual installation
 
@@ -155,6 +164,15 @@ make install
 Set the application key
 ```bash
 php artisan key:generate
+```
+
+#### Updating
+
+When the new version is released, just update Composer (PHP) dependencies and repeat the installation process:
+
+```bash
+composer update
+make install
 ```
 
 ## Customization
