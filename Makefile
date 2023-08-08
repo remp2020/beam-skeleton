@@ -7,6 +7,9 @@ install:
 	make js
 	php artisan migrate
 
+install-demo: install
+	php artisan application:demo
+
 js:
 	yarn install
 	yarn production

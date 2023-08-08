@@ -16,6 +16,9 @@ services:
       default:
         aliases:
           - "beam.remp.press"
+          - "segments.remp.press"
+          - "tracker.remp.press"
+          - "sso.remp.press"
 
   beam:
     domainname: "beam.remp.press"

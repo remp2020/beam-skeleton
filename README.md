@@ -5,51 +5,55 @@ This is a pre-configured skeleton of REMP Beam application with simple installat
 Beam Admin serves as a tool for configuration of sites, properties and segments. It's the place to see
 the stats based on the tracked events and configuration of user segments.
 
-## Prerequisities
+## Dependencies
 
-To fully functional Beam you have to integrate skeleton application with other REMP tools: 
+To run Beam you have to integrate skeleton application with other REMP tools listed below.
 
-## Sso
+Note: All the dependencies mentioned below are already provided in Docker Compose, so you don't have to install them manually. Use of the Docker Compose and images provided in this repository is not recommended in the production environment and is intended for testing/development purposes.  
+
+### Sso
 
 As a default authentication method for secured routes Beam is using middleware `Remp\LaravelSso\Http\Middleware\VerifyJwtToken`, which authenticates user against preconfigured [SSO service](https://github.com/remp2020/remp/tree/master/Sso) running on `http://sso.remp.press` url.
-To change Sso url edit `.env` variable `REMP_SSO_ADDR`.
 
-To proper network configuration you should edit `docker-compose.override.yml` according your setup:
+You can run SSO from the Docker Compose provided in this repository. By default, SSO is exposed at `http://sso.remp.press:9494`. See [docker-compose.override.yml](./docker-compose.override.yml) for more information.
+
+You can also run SSO locally by installing it manually. Please follow [SSO documentation](https://github.com/remp2020/remp/tree/master/Sso). To change the SSO URL edit `.env` variable `REMP_SSO_ADDR`. To properly configure Docker network to access locally-running SSO, you should edit `docker-compose.override.yml` and make your SSO instance accessible to the network of Beam's Docker compose via `extra_hosts` directive:
 
 ```yaml
 services:
 # ... 
   beam:
     extra_hosts:
-      - "sso.remp.press:192.168.65.2"
+      - "sso.remp.press:172.17.0.1" # usual IP of the Docker host machine
 ```
 
-[Sso documentation](https://github.com/remp2020/remp/tree/master/Sso).
+[SSO documentation](https://github.com/remp2020/remp/tree/master/Sso).
 
-## Segments
+### Tracker API
 
-Segments (also known as Journal) is read-only API to acquire aggregations over the tracked data.
+Tracker API is a gateway for storing both user and system events. Tracker validates the request and posts Influx-formatted set of data to a message broker implementation (either Kafka or Pub/Sub).
 
-To run segments please see [segments documentation.](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/segments)
+You can run Tracker API and its dependencies from the Docker Compose provided in this repository. By default, Tracker API is exposed at `http://tracker.remp.press:9494`. See [docker-compose.override.yml](./docker-compose.override.yml) for more information.
 
-Now edit configured address of segments service in `.env` configuration `REMP_SEGMENTS_ADDR`.
-
-## Tracker
-
-Tracker is a gateway for storing both user and system events. Tracker validates the request and posts Influx-formatted set of data to a message broker implementation (either Kafka or Pub/Sub).
-
-To run tracker locally please follow [tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker).
-
-Now edit configured address of tracker in `.env` configuration `REMP_TRACKER_ADDR`.
+If you want to run Tracker API locally, please follow [tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker) and possibly edit configured address of tracker in `.env` configuration `REMP_TRACKER_ADDR`.
 
 [Tracker documentation](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/tracker).
 
+### Segments API
+
+Segments API (also known as Journal API) is read-only API to acquire aggregations over the tracked data.
+
+You can run Segments API and its dependencies (Elasticsearch) from the Docker Compose provided in this repository. By default, Segments API is exposed at `http://segments.remp.press`.
+
+If you want to run Segments API locally, please follow [segments documentation.](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/segments) and edit configured address of tracker in `.env` configuration `REMP_SEGMENTS_ADDR`.
+
+[Segments documentation.](https://github.com/remp2020/remp/tree/master/Beam/go/cmd/segments)
 
 ## Installation
 
 ### Docker
 
-The simplest possible way is to run this application in docker containers. Docker Compose is used for orchestrating. Except of these two application, there is no need to install anything on host machine.
+The simplest possible way is to run this application in Docker containers. Docker Compose is used for orchestrating. Except of these two applications, there is no need to install anything on host machine.
 
 Recommended _(tested)_ versions are:
 
@@ -58,7 +62,7 @@ Recommended _(tested)_ versions are:
 
 #### Steps to install application within docker
 
-1. Get the application
+1. Get the Beam Skeleton:
 
     ``` bash
     git clone https://github.com/remp2020/beam-skeleton.git
@@ -70,20 +74,24 @@ Recommended _(tested)_ versions are:
 
 2. Prepare environment & configuration files
     ```bash
+    # Configuration of Beam web admin
     cp .env.example .env
     ```
     ```bash
+    # Configuration of other dependencies Beam requires (databases, other REMP tools)
     cp docker-compose.override.example.yml docker-compose.override.yml
     ```
-   No changes are required if you want to run application as it is.
+    
+    No changes are required if you want to run application as it is.
 
-   **Note:** nginx web application runs on the port 80. Make sure this port is not used, otherwise you will encounter error like this when initializing Docker:
+    **Note:** Nginx web application runs on the port 9494 by default. Make sure this port is not used, otherwise you will encounter error like this when initializing Docker:
 
     ```
-    ERROR: for nginx  Cannot start service nginx: Ports are not available: listen tcp 0.0.0.0:80: bind: address already in use
+    ERROR: for nginx  Cannot start service nginx: Ports are not available: listen tcp 0.0.0.0:9494: bind: address already in use
     ```
 
-   In such case, change port mapping in `docker-composer.override.yml`. For example, the following setting maps internal port 80 to external port 8080, so the application will be available at http://beam.remp.press:8080.
+    In such case, change port mapping in `docker-composer.override.yml`. For example, the following setting maps nginx's internal port 80 to external port 7979, so the application will be available at http://beam.remp.press:7979.
+
     ```yaml
     services:
     # ...
@@ -92,13 +100,15 @@ Recommended _(tested)_ versions are:
           - "8080:80"
     ```
 
-3. Setup host
+3. Setup hosts
 
-   Default host used by application is `http://beam.remp.press`.
-   This domain should by pointing to localhost (`127.0.0.1`), so add it to local `/etc/hosts` file.
+   Default host used by application is `http://beam.remp.press`. This domain should point to localhost (`127.0.0.1`), so add it to local `/etc/hosts` file.
 
     ```bash
     echo '127.0.0.1 beam.remp.press' | sudo tee -a /etc/hosts
+    echo '127.0.0.1 tracker.remp.press' | sudo tee -a /etc/hosts
+    echo '127.0.0.1 segments.remp.press' | sudo tee -a /etc/hosts
+    echo '127.0.0.1 sso.remp.press' | sudo tee -a /etc/hosts
     ```
 
 4. Start Docker containers
@@ -108,24 +118,32 @@ Recommended _(tested)_ versions are:
     ```
 
    You should see logs of starting containers. This may include errors, because application was not yet initialized.
-   Enter the application docker container:
+
+5. If you run SSO from the Docker Compose (default), we need to initialize it first. Run the following set of commands:
 
     ```bash
     # run from anywhere in the project
-    docker compose exec beam bash
+    docker compose exec mysql mysql -uroot -psecret -e 'CREATE DATABASE IF NOT EXISTS sso'
+    docker compose exec sso make install
+    docker compose exec sso php artisan key:generate
+    docker compose exec sso php artisan jwt:secret
     ```
 
-   After that, choose and run one of the two installation options:
+5. Now we are ready to initialize Beam's web app:
 
-   ```bash
-   make install
-   ```
+    ```bash
+    # run from anywhere in the project
+    docker compose exec beam make install
+    docker compose exec beam php artisan key:generate
+    ```
    
-5. Set the application key
+6. Seed the demo data (optional)
 
-   ```bash
-   php artisan key:generate
-   ```
+    ```bash
+    docker compose exec beam php artisan db:seed DemoSeeder
+    ```
+   
+7. Visit `http://beam.remp.press:9494`.
 
 #### Updating
 
