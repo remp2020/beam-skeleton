@@ -33,4 +33,5 @@ yarn-error.log
 /public/vendor/
 /config/beam.php
 /config/services.remp.php
+/config/system.php
 /storage/logs/
