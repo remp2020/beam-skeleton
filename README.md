@@ -145,6 +145,14 @@ Recommended _(tested)_ versions are:
    
 7. Visit `http://beam.remp.press:9494`.
 
+8. Visit testing article to feed data to Beam (optional):
+
+If you seeded demo data (optional step 6), you can visit http://beam.remp.press:9494/test-article.html. The article automatically tracks pageviews and provides sample implementation of API calls that your systems should implement.
+
+First, upsert the information about article to Beam by calling Beam's API in the first green box. Once Beam knows the article information, you should start seeing article stats in the Beam dashboard.
+
+Second, you can track conversion for this article. Each call tracks new conversion to Beam.
+
 #### Updating
 
 When the new version is released, just update Composer (PHP) dependencies and repeat the installation process:
