@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="http://beam.remp.press:9494/test-article.html" />
+
+    <title>Lorem Ipsum News</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header, footer {
+            background-color: #f2f2f2;
+            padding: 10px;
+            text-align: center;
+        }
+        article {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        article > p {
+            font-size: 18px;
+            line-height: 1.6em;
+        }
+        .info {
+            background: #fbfbfb;
+            border: 1px solid #0a68b4;
+        }
+        .admin {
+            background: #f8fff6;
+            border: 1px solid #2e7d32;
+        }
+        .message {
+            margin-bottom: 1em;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 16px;
+            line-height: 1.6em;
+        }
+        .message p {
+            margin: 0 0 .8em 0;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <h1>Nobrand News</h1>
+    <p>Your Source for Unbranded Information</p>
+</header>
+<article>
+    <h2>Lorem Ipsum</h2>
+
+    <div class="info message">
+        <p>This visit is automatically being tracked to the Tracker API. By visiting this page, your Beam dashboard should react and start displaying concurrent visits. To gain more concurrents, open this URL in more browsers / browser containers (new tabs won't do).</p>
+        <p>You need to keep the site focused for at least 5 seconds to be counted within active concurrents, please scroll a bit :).</p>
+    </div>
+
+    <div class="admin message">
+        <p>CMS should send information about each article to Beam when it's published or updated.<br>
+            Call <code>/api/v2/articles/upsert</code> from here: <button type="button" id="track-article">CALL API</button>
+        </p>
+        <p>You can see the article stats here: <a target="_blank" href="https://beam.remp.press:9494/article?external_id=ar789">https://beam.remp.press:9494/article?external_id=ar789</a>.</p>
+    </div>
+
+    <div class="admin message">
+        <p>E-commerce should send information about each payment attributed to the article to Beam when the payment is realized.</p>
+        <p>
+            Call <code>/api/conversions/upsert</code> from here: <button type="button" id="track-conversion">CALL API</button><br>
+            And see tracked conversions here: <a target="_blank" href="http://beam.remp.press:9494/conversions">http://beam.remp.press:9494/conversions</a>.
+        </p>
+    </div>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque sed posuere mauris. Ut bibendum pretium lectus id mollis. Ut iaculis turpis vel ipsum tempus, quis condimentum ipsum blandit. Ut ultricies vestibulum est, at fringilla dolor laoreet in. Vestibulum porta purus nisl. Suspendisse potenti. Donec egestas felis et est imperdiet fringilla. Etiam vehicula malesuada ligula rutrum sollicitudin. Suspendisse ut ultrices sapien. Nam at mauris quis mauris condimentum scelerisque. Sed sem quam, aliquam at tellus ut, aliquet vestibulum neque. Proin tincidunt porta ante eu tristique. Mauris fringilla venenatis magna. Suspendisse justo est, blandit non lectus eget, vulputate bibendum velit. Ut eu leo ex. Praesent tristique cursus sapien, non lacinia turpis suscipit at.</p>
+    <p>Mauris id ornare elit. Donec commodo ex sit amet posuere commodo. Proin arcu nunc, porta eu lectus in, mollis tincidunt sem. Nullam et ante eget nibh vestibulum consequat. Vivamus vestibulum, nisl sit amet vulputate laoreet, ante lorem pellentesque risus, non facilisis justo nisl facilisis quam. Vivamus vitae tristique tortor, id suscipit risus. Proin eu tempor tellus, in tristique ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam sodales metus nunc, et feugiat dui interdum ut. Quisque at ultrices felis.</p>
+    <p>Nam rhoncus id nulla varius malesuada. Donec venenatis sem sit amet nisi iaculis, a rhoncus ante rhoncus. Sed interdum massa eu leo convallis sagittis. Duis placerat diam malesuada sapien ullamcorper, sed tincidunt lacus aliquam. Nam condimentum odio elit, non blandit lectus tempus lobortis. Maecenas sagittis pretium elit et imperdiet. Sed cursus nec enim ut ultricies. Suspendisse pulvinar libero vitae sapien fermentum ullamcorper.</p>
+    <p>Quisque gravida aliquet arcu, non rhoncus enim ornare a. Mauris vitae felis ut ante mollis ultricies molestie quis quam. Quisque tellus justo, vulputate in mollis a, pharetra a ipsum. Phasellus tempor velit enim, efficitur sagittis libero laoreet ac. Sed quis nisl tempus, iaculis nisl at, accumsan ligula. Donec risus mauris, auctor at volutpat ut, varius a mi. Duis mattis neque eget volutpat congue.</p>
+    <p>Curabitur felis lacus, rhoncus eu bibendum sit amet, bibendum vel dolor. Suspendisse viverra massa sed nisi aliquet volutpat. Proin sed nisi ut dui porttitor bibendum. Vivamus pretium leo non metus molestie, et bibendum elit fermentum. Curabitur aliquam sed erat id pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris iaculis lorem nec eros ultricies, quis molestie turpis gravida. Morbi ut purus tempor nunc bibendum ornare. Maecenas ultricies, libero eget gravida facilisis, metus justo condimentum lorem, sed iaculis nisi augue sed ipsum.</p>
+    <p>Quisque id congue arcu. Nunc hendrerit magna eu nisi commodo, quis mattis felis bibendum. Mauris ornare ac lectus non vulputate. Phasellus dapibus lectus ut ipsum ornare, posuere convallis ligula malesuada. Donec hendrerit arcu libero, a ullamcorper ipsum auctor at. Pellentesque eget mollis urna. Vestibulum malesuada eget ex quis rutrum. Nulla facilisi. Duis ante nisl, malesuada eget volutpat a, ultrices in ante. Sed porttitor orci a venenatis efficitur. Mauris nec risus mauris. Phasellus feugiat libero sit amet odio sagittis tincidunt.</p>
+    <p>Curabitur sed lectus convallis, dignissim lectus non, lobortis odio. Etiam quis mauris sagittis, facilisis massa vitae, euismod lectus. Vestibulum eros lectus, accumsan vitae erat consequat, imperdiet laoreet nibh. Fusce ac placerat nibh. Suspendisse potenti. Curabitur justo ex, dignissim luctus tincidunt nec, rhoncus eget felis. Morbi finibus tempor justo id placerat.</p>
+    <p>Vivamus scelerisque turpis urna, a tempor orci vestibulum at. Vestibulum velit dolor, eleifend eget eros nec, semper dignissim elit. Cras lobortis, est a feugiat hendrerit, turpis risus interdum nisl, ac tempor tellus lacus eget elit. Nunc urna nunc, molestie nec leo non, fermentum efficitur eros. Cras semper dapibus risus non porta. In id tellus eu neque commodo egestas. Phasellus bibendum dolor sed mauris aliquet, a volutpat turpis vestibulum.</p>
+
+</article>
+<footer>
+    <p>&copy; 2023 Nobrand News. All rights reserved.</p>
+</footer>
+
+<script type="text/javascript">
+    (function(win, doc) {
+        function mock(fn) {
+            return function() {
+                this._.push([fn, arguments])
+            }
+        }
+        function load(url) {
+            var script = doc.createElement("script");
+            script.type = "text/javascript";
+            script.async = true;
+            script.src = url;
+            doc.getElementsByTagName("head")[0].appendChild(script);
+        }
+        win.remplib = win.remplib || {};
+        var mockFuncs = {
+            "campaign": "init",
+            "tracker": "init trackEvent trackPageview trackCommerce",
+            "iota": "init"
+        };
+
+        Object.keys(mockFuncs).forEach(function (key) {
+            if (!win.remplib[key]) {
+                var fn, i, funcs = mockFuncs[key].split(" ");
+                win.remplib[key] = {_: []};
+
+                for (i = 0; i < funcs.length; i++) {
+                    fn = funcs[i];
+                    win.remplib[key][fn] = mock(fn);
+                }
+            }
+        });
+
+        // change URL to location of BEAM remplib.js
+        load("http://beam.remp.press:9494/assets/lib/js/remplib.js");
+    })(window, document);
+
+    // configuration
+    var rempConfig = {
+        // UUIDv4 based REMP BEAM token of appropriate property
+        // (see BEAM Admin -> Properties)
+        token: '1d585a37-5503-43c8-8be3-6360012a6541',
+
+        // optional, identification of logged user
+        userId: '1234',
+
+        // optional, flag whether user is currently subscribed to the displayed content
+        userSubscribed: true,
+
+        // optional, IDs of currently active subscriptions granting user access
+        subscriptionIds: ['4474'],
+
+        // optional, this is by default generated by remplib.js library and you don't need to override it
+        // browserId: String,
+
+        // optional, controls where cookies (UTM parameters of visit) are stored
+        cookieDomain: ".remp.press",
+
+        // optional, controls which type of storage should be used by default (`local_storage` or `cookie`)
+        // default is `local_storage`
+        // storage: "local_storage",
+
+        // optional, specifies how long to store specific keys in storage (in minutes)
+        // storageExpiration: {
+        //     // default value (in minutes) for all storage keys if not overriden in `keys`
+        //     "default": 15,
+        //     // specific pairs of key name and life length in minutes
+        //     "keys": {
+        //         "browser_id": 1051200, // 2 years in minutes
+        //         "campaigns": 1051200
+        //     }
+        // },
+
+        // optional, article details if pageview is on the article
+        article: {
+            id: 'ar789', // required, ID of article in your CMS
+            locked: false, // optional, flag whether content was locked at the time of visit for this pageview
+            contentType: 'article', // optional, type of the content, 'article' if not specified or 'feed'
+            elementFn: function() { // callback returning DOM element containing article content
+                return document.querySelector('article');
+            }
+        },
+
+        // required, Tracker API specific options
+        tracker: {
+            // required, URL location of BEAM Tracker
+            url: "http://tracker.remp.press:9494",
+
+            // optional time spent measuring (disabled by default)
+            // if enabled, tracks time spent on current page
+            timeSpent: {
+                enabled: true, // if enabled, tracks time spent on the webpage
+                // interval: Number, // optional, frequency of sending tracked progress in seconds (default value 5; interval is progressive and gets prolonged in time)
+            },
+
+            // optional, achieved scroll depth tracking (disabled by default)
+            readingProgress: {
+                enabled: false, // if enabled, tracks achieved scroll depth
+                // interval: Number // optional, frequency of sending tracked progress in seconds (default value 5)
+            },
+
+            // optional, allows to specify custom referer medium
+            // this value overrides implicit referer medium computed from Referer header by tracker
+            // refererMedium: "beam_testing"
+        }
+    };
+    remplib.tracker.init(rempConfig);
+
+    // This should be handled by backend.
+    document.querySelector('#track-article').addEventListener('click', function() {
+        fetch('http://beam.remp.press:9494/api/v2/articles/upsert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer sso-api-token', // see http://sso.remp.press:9494 to see/generate API keys
+            },
+            body: JSON.stringify({
+                "articles": [
+                    {
+                        "external_id": rempConfig.article.id, // String; Required; ID of article in your CMS,
+                        "property_uuid": rempConfig.token, // String; Required; Beam property token, you can get it in Beam admin - Properties,
+                        "title": "Lorem ipsum", // String; Required; Primary title of the article,
+                        "url": "http://beam.remp.press:9494/test-article.html", // Public and valid URL of the article,
+                        "content_type": "article", // String; Optional; Content type of the article. Default value "article" used if not provided.
+                        "authors": [ // Optional
+                            {
+                                "external_id": "1", // String; Required; External id of the author
+                                "name": "Jon Snow" // String; Required; Name of the author
+                            }
+                        ],
+                        "sections": [ // Optional
+                            {
+                                "external_id": "1", // String; Required; External id of the section
+                                "name": "Opinions" // String; Required; Name of the section
+                            }
+                        ],
+                        "tags": [ // Optional
+                            {
+                                "external_id": "1", // String; Required; External id of the tag
+                                "name": "Elections 2020", // String; Required; Name of the tag,
+                                "categories": [ // Optional
+                                    {
+                                        "external_id": "1", // String; Required; External id of the tag category
+                                        "name": "USA" // String; Required; Name of the tag category
+                                    }
+                                ]
+                            }
+                        ],
+                        "published_at": (new Date).toISOString() // RFC3339 formatted datetime
+                    }
+                ]
+            })
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.errors) {
+                    alert(JSON.stringify(data.errors));
+                    return;
+                }
+                alert('OK!');
+            })
+            .catch(function(error) {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    })
+
+    // This should be handled by backend.
+    document.querySelector('#track-conversion').addEventListener('click', function() {
+        fetch('http://beam.remp.press:9494/api/conversions/upsert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer sso-api-token', // see http://sso.remp.press:9494 to see/generate API keys
+            },
+            body: JSON.stringify({
+                "conversions": [
+                    {
+                        "article_external_id": rempConfig.article.id, // String; Required; ID of article in your CMS,
+                        "transaction_id": Math.random().toString().slice(2,11), // String; Required; ID of transaction (unique for each transaction),
+                        "amount": 17.99, // Numeric; Required; Nominal amount of the transaction, e.g. 10.0
+                        "currency": "EUR", // String; Required; Currency of the transaction, e.g. ",EUR"
+                        "paid_at": (new Date).toISOString() , // String; Required; RFC3339 formatted datetime with date of the transaction,
+                        "user_id": rempConfig.userId // Optional; Identifier of user who made a transaction
+                    }
+                ]
+            })
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.errors) {
+                    alert(JSON.stringify(data.errors));
+                    return;
+                }
+                alert('OK!');
+            })
+            .catch(function(error) {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    })
+</script>
+
+</body>
+</html>

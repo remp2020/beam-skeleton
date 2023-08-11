@@ -193,6 +193,16 @@ composer update
 make install
 ```
 
+### Known issues
+
+After the first events are tracked to the Tracker API, the data is not yet readable from the Segments API due to the schema changes. You can see this if the Beam Dashboard doesn't display any data even if it should. The browser's developer tools display message similar to this:
+
+```
+Server error: `POST http://segments.remp.press:9494/journal/concurrents/count` resulted in a `500 Internal Server Error` response:\n"elastic: Error 400 (Bad Request): all shards failed [type=search_phase_execution_exception]"\n\n'
+```
+
+In order to fix this issue, please restart Segments API, so it can populate it's in-memory cache again.
+
 ## Customization
 
 Beam-skeleton is Laravel application with standard [directory structure](https://laravel.com/docs/8.x/structure) and whole Beam functionality is provided as [Laravel package](https://laravel.com/docs/8.x/packages).
