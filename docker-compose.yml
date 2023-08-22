@@ -16,14 +16,17 @@ services:
       default:
         aliases:
           - "beam.remp.press"
+          - "segments.remp.press"
+          - "tracker.remp.press"
+          - "sso.remp.press"
 
   beam:
     domainname: "beam.remp.press"
     hostname: "beam"
     user: "${UID:-1000}:${GID:-1000}"
     environment:
-      APP_NAME: "Beam"
       PHP_IDE_CONFIG: "serverName=beam.remp.press"
+      XDEBUG_CONFIG: "client_host=172.17.0.1"
     build:
       context: "./docker/php"
       args:
@@ -39,6 +42,47 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    restart: "unless-stopped"
+
+  queue:
+    user: "${UID:-1000}:${GID:-1000}"
+    build:
+      context: "./docker/php"
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+        UNAME: ${UNAME:-docker}
+    volumes:
+      - ".:/var/www/html:rw"
+    depends_on:
+      nginx:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    entrypoint: ["php", "artisan", "queue:work"]
+    restart: "unless-stopped"
+
+  # This service only makes sense locally, for development. In production, you need to execute `php artisan schedule:run`
+  # every minute. Configure your crontab accordingly.
+  schedule:
+    build:
+      context: "./docker/php"
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+        UNAME: ${UNAME:-docker}
+    volumes:
+      - ".:/var/www/html:rw"
+    depends_on:
+      nginx:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    entrypoint: ["php", "artisan", "schedule:work"]
     restart: "unless-stopped"
 
   mysql:

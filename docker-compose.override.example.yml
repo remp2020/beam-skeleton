@@ -2,18 +2,146 @@ version: "3"
 
 services:
   nginx:
+    environment:
+      NGINX_PORT: "9494"
     ports:
-      - "80:80"
+      - "9494:80"
+    networks:
+      default:
+        aliases:
+          - "sso.remp.press"
+    volumes:
+      - "sso:/var/www/mnt/sso:ro"
 
-# Uncomment if you want to expose MySQL port 3306 outside of Docker
-#  mysql:
-#    ports:
-#      - "3306:3306"
+  # Uncomment if you want to expose MySQL port 3306 outside of Docker
+  #  mysql:
+  #    ports:
+  #      - "3306:3306"
 
-#  beam:
-#    environment:
-#      XDEBUG_CONFIG: "client_host=10.254.254.254"
-#      PHP_IDE_CONFIG: "serverName=beam.remp.press"
-#
-#    extra_hosts:
-#      - "sso.remp.press:172.17.0.1" # This is how Beam container knows that sso.remp.press is running/exposed on the Docker host machine
+  beam:
+    extra_hosts:
+      - "sso.remp.press:172.17.0.1" # if you run your own SSO instance, point this to the Docker host machine; expecting that SSO is resolvable there
+
+      # Following hosts are commented by default, because they're handled by Docker Compose services defined in this
+      # file. If you wish to run them separately outside of this Docker Compose, remove/comment the service(s) below
+      # and uncomment the extra host in this section to replace it.
+      #
+      # Note, that the service needs to be resolvable on the host machine by the hostname defined here.
+
+  #      - "tracker.remp.press:172.17.0.1" # uncomment if you run Tracker API separately; it should be resolvable on the host machine
+  #      - "kafka:172.17.0.1" # uncomment if you run Kafka separately; it should be resolvable on the host machine
+  #      - "zookeeper:172.17.0.1" # uncomment if you run Zookeeper separately; it should be resolvable on the host machine
+  #      - "telegraf:172.17.0.1" # uncomment if you run Telegraf separately; it should be resolvable on the host machine
+  #      - "elasticsearch:172.17.0.1" # uncomment if you run Elasticsearch separately; it should be resolvable on the host machine
+  #      - "segments.remp.press:172.17.0.1" # uncomment if you run Segments API separately; it should be resolvable on the host machine
+
+  # REMP SSO
+
+  sso:
+    image: "remp/skeleton-sso"
+    domainname: "sso.remp.press"
+    hostname: "sso"
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      REMP_SSO_ADDR: http://sso.remp.press:9494
+      GOOGLE_CALLBACK_URL: http://sso.remp.press:9494/auth/google/callback
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - "sso:/var/www/html/Sso:rw"
+
+  # REMP TRACKER
+  #
+  # Tracker is used to validate and store tracked events from Beam's clients. If you with to run Tracker and its related
+  # services outside the Docker Compose, alter the REMP_TRACKER_ADDR environment variable and uncomment relevant line
+  # of the beam.extra_hosts service configuration above.
+
+  tracker:
+    image: "remp/skeleton-tracker"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      zookeeper:
+        condition: service_healthy
+    restart: "unless-stopped"
+
+  kafka:
+    image: "wurstmeister/kafka"
+    hostname: "kafka"
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: "kafka"
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_CREATE_TOPICS: "beam_events:1:1"
+      KAFKA_BROKER_ID: "1001"
+      KAFKA_RESERVED_BROKER_MAX_ID: "1001"
+    healthcheck:
+      test: "nc -z localhost 9092"
+      timeout: 2s
+      retries: 10
+      interval: 5s
+    volumes:
+      - "kafka-data:/data"
+    restart: "unless-stopped"
+
+  zookeeper:
+    image: "wurstmeister/zookeeper"
+    hostname: "zookeeper"
+    healthcheck:
+      test: [ "CMD", 'nc', '-z', 'localhost', '2181' ]
+      timeout: 2s
+      retries: 10
+      interval: 5s
+    restart: "unless-stopped"
+
+  # TELEGRAF + ELASTICSEARCH
+  #
+  # Telegraf is used to read tracked events from Kafka and populate them into Elasticsearch. If you wish to run these
+  # services outside the Docker Compose
+
+  elasticsearch:
+    image: "remp/skeleton-elasticsearch"
+    environment:
+      - "bootstrap.memory_lock=true"
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+    volumes:
+      - "elastic-data:/usr/share/elasticsearch/data"
+    healthcheck:
+      test: "curl -s http://localhost:9200 >/dev/null || exit 1"
+      timeout: 2s
+      retries: 10
+      interval: 5s
+    restart: "unless-stopped"
+
+  telegraf:
+    image: "remp/skeleton-telegraf"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    restart: "unless-stopped"
+
+  # SEGMENTS API
+  #
+  # This API is used by Beam to read aggregated data from Elasticsearch. Uncomment following section if you don't run
+  # the API as a standalone app outside the Docker.
+
+  segments:
+    image: "remp/skeleton-segments"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    restart: "unless-stopped"
+
+volumes:
+  kafka-data:
+  elastic-data:
+  sso:
