@@ -155,10 +155,26 @@ Second, you can track conversion for this article. Each call tracks new conversi
 
 #### Updating
 
-When the new version is released, just update Composer (PHP) dependencies and repeat the installation process:
+If you use docker compose, update the images to their latest versions first:
 
 ```bash
+# stop the containers if they're running
+docker compose stop
+
+# download the latest versions of images
+docker compose pull
+
+# rebuild the containers with the new images
+docker compose up --force-recreate --build 
+```
+
+If Beam is running now, connect to the Docker container (if you use it), update Composer (PHP) dependencies, and repeat the installation process:
+
+```bash
+# install latest version of beam
 composer update
+
+# run service commands (migrations, cache generation, etc.)
 make install
 ```
    
