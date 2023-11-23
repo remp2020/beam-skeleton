@@ -172,10 +172,10 @@ If Beam is running now, connect to the Docker container (if you use it), update 
 
 ```bash
 # install latest version of beam
-composer update
+docker compose exec beam composer update
 
 # run service commands (migrations, cache generation, etc.)
-make install
+docker compose exec beam make install
 ```
    
 ### Manual installation
