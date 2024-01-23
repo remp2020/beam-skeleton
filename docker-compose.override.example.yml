@@ -6,10 +6,6 @@ services:
       NGINX_PORT: "9494"
     ports:
       - "9494:80"
-    networks:
-      default:
-        aliases:
-          - "sso.remp.press"
     volumes:
       - "sso:/var/www/mnt/sso:ro"
 

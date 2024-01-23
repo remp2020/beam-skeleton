@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "remp/beam-module": "^3.2"
+        "remp/beam-module": "^3.5"
     },
     "autoload": {
         "psr-4": {
