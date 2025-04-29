@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "remp/beam-module": "^3.8"
+        "remp/beam-module": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -47,8 +47,9 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover",
-            "@php artisan vendor:publish --tag=beam-assets"
+            "@php artisan package:discover --ansi",
+            "@php artisan vendor:publish --tag=beam-assets --force",
+            "@php artisan service:post-install"
         ]
     },
     "minimum-stability": "dev",

@@ -1,4 +1,6 @@
-FROM php:8.2.14-fpm
+FROM mysql:8.0 AS mysql_client_stage
+
+FROM php:8.3.20-fpm
 
 # ADD NON-ROOT USER; IF THE VARIABLES ARE NOT SET, DOCKER COMPOSE DEFAULTS TO 1000:1000 "docker"
 
@@ -16,7 +18,7 @@ RUN useradd -m -u ${UID} -g ${GID} -o -s /bin/bash ${UNAME}
 
 ENV BUILD_DEPS g++ build-essential libsasl2-dev libssl-dev
 
-ENV RUN_DEPS libzip-dev libicu-dev git wget vim curl less gnupg zlib1g-dev libpng-dev libjpeg-dev libonig-dev
+ENV RUN_DEPS libzip-dev libicu-dev git wget vim curl less gnupg zlib1g-dev libpng-dev libjpeg-dev libonig-dev libncurses6
 
 # INIT (single command so the intermediates are not stored)
 
@@ -28,6 +30,9 @@ RUN apt-get update && apt-get install -y ${BUILD_DEPS} ${RUN_DEPS} \
         -y --auto-remove \
         -o APT::AutoRemove::RecommendsImportant=false \
         ${BUILD_DEPS}
+
+COPY --from=mysql_client_stage /usr/bin/mysqldump /usr/bin/mysqldump
+COPY --from=mysql_client_stage /usr/bin/mysql /usr/bin/mysql
 
 # PHP
 

@@ -182,7 +182,7 @@ docker compose exec beam make install
 
 #### Dependencies
 
-- PHP 8.1
+- PHP 8.2
 - MySQL 8
 - Redis 6.2
 

@@ -61,6 +61,11 @@
     </div>
 
     <div class="admin message">
+        <p>Source code of this testing webpage includes API token from SSO. Please visit <a href="http://sso.remp.press:9494">SSO</a> and replace "sso-api-token" in this HTML file with the actual token for the following testing API calls to work correctly.</p>
+        <p>Otherwise, you'd get 401 Unauthorized messages into your JS console.</p>
+    </div>
+
+    <div class="admin message">
         <p>CMS should send information about each article to Beam when it's published or updated.<br>
             Call <code>/api/v2/articles/upsert</code> from here: <button type="button" id="track-article">CALL API</button>
         </p>
