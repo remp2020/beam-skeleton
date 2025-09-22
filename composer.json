@@ -10,27 +10,8 @@
             "php-http/discovery": true
         }
     },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "snowplow/referer-parser-php",
-                "version": "0.0.1",
-                "source": {
-                    "url": "https://github.com/snowplow-referer-parser/php-referer-parser",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "autoload": {
-                    "psr-4": {
-                        "Snowplow\\": "src/Snowplow"
-                    }
-                }
-            }
-        }
-    ],
     "require": {
-        "remp/beam-module": "^4.1"
+        "remp/beam-module": "^4.2"
     },
     "autoload": {
         "psr-4": {
